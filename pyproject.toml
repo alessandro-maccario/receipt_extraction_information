@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "receipt-extraction-information"
+version = "0.1.0"
+description = ""
+authors = ["alessandro-maccario <a.maccario1@campus.unimib.it>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<4.0"
+numpy = "^2.1.3"
+easyocr = "^1.7.2"
+torch = "^2.5.1"
+torchvision = "^0.20.1"
+torchaudio = "^2.5.1"
+pytesseract = "^0.3.13"
+imutils = "^0.5.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
