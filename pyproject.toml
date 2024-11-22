@@ -14,6 +14,7 @@ torchvision = "^0.20.1"
 torchaudio = "^2.5.1"
 pytesseract = "^0.3.13"
 imutils = "^0.5.4"
+tqdm = "^4.67.0"
 
 
 [build-system]
