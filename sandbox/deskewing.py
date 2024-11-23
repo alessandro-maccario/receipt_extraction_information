@@ -1,3 +1,7 @@
+"""
+Script already integrated into "image_processing.py".
+"""
+
 import cv2
 
 
@@ -15,17 +19,19 @@ class Deskewing:
         cv2.imwrite("sandbox/receipts/output/gray.jpg", gray)
         blur = cv2.GaussianBlur(gray, (5, 5), 0)
         thresh = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
-        cv2.imwrite("sandbox/receipts/output/thres.jpg", thresh)
+        # cv2.imwrite("sandbox/receipts/output/thres.jpg", thresh)
 
         # Apply dilate to merge text into meaningful lines/paragraphs.
         # Use larger kernel on X axis to merge characters into single line, cancelling out any spaces.
         # But use smaller kernel on Y axis to separate between different blocks of text
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (250, 1))
         dilate = cv2.dilate(thresh, kernel, iterations=2)
-        cv2.imwrite("sandbox/receipts/output/dilate.jpg", dilate)
+        # cv2.imwrite("sandbox/receipts/output/dilate.jpg", dilate)
 
         # Find all contours
-        contours, hierarchy = cv2.findContours(dilate, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+        contours, hierarchy = cv2.findContours(
+            dilate, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE
+        )
         contours = sorted(contours, key=cv2.contourArea, reverse=True)
 
         # Find largest contour and surround in min area box
