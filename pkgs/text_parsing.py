@@ -3,6 +3,7 @@ import sys
 import re
 import glob
 import pandas as pd
+from symspellpy import SymSpell, Verbosity
 
 # Add the root folder to sys.path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -54,7 +55,11 @@ for txt_file in text_extracted:
         item_price = [item_tuple for item_tuple in item_price if "." in item_tuple[1]]
         print("Test item, price:", item_price)
 
+        # TODO: for each item in the tuple, get only the text, split it into token, check and edit the text if the token is found in the dictionry, write back the item to the tuple
+
         # # convert and save the pd.DataFrame into a csv
         # df = pd.DataFrame(list(test_item_price), columns=["item", "price"])
         # print(df)
         # df.to_csv("sandbox/text_extraction/result_original.csv", index=False)
+
+print([item[0] for item in item_price])
