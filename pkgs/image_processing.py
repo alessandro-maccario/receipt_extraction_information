@@ -11,6 +11,9 @@ Testing extraction from receipt images by using EasyOCR:
 - https://github.com/JaidedAI/EasyOCR
 - https://www.jaided.ai/easyocr/
 - https://www.jaided.ai/easyocr/documentation/
+
+Symspell:
+- Leipzig Corpora: https://corpora.uni-leipzig.de/en?corpusId=deu_news_2023
 """
 
 import os
