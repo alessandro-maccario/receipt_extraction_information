@@ -4,6 +4,7 @@ import re
 import glob
 import pandas as pd
 import spacy
+from pathlib import Path
 from symspellpy import SymSpell, Verbosity
 
 
@@ -34,6 +35,10 @@ print("TEXT EXTRACTED:", text_extracted)
 
 
 for txt_file in text_extracted:
+    # grab only the txt name to be fed as a filename for saving the correct file
+    txt_file_path_to_name = Path(txt_file)
+    txt_filename = txt_file_path_to_name.name[:-4]
+
     txt_file = path_normalizer(txt_file)
 
     with open(txt_file) as txt_processing:
@@ -79,6 +84,6 @@ for txt_file in text_extracted:
         # convert and save the pd.DataFrame into a csv
         df = pd.DataFrame(list(item_price_list_tuples), columns=["item", "price"])
         # print(df)
-        df.to_csv("sandbox/text_extraction/result_original.csv", index=False)
+        df.to_csv(f"sandbox/text_extraction/{txt_filename}_result.csv", index=False)
 
 # print([item[0] for item in item_price])
