@@ -80,6 +80,7 @@ def item_price_preprocess(nlp, text_item_price) -> list[tuple]:
                     # print(f"Suggestion: {suggestion.term}, Distance: {suggestion.distance}, Frequency: {suggestion.count}")
             else:
                 print("No suggestions found.")
+                text_item_price_corrected_joined = ""
 
         # save the corrected text and the price in a tuple
         fixed_item_price_list.append((text_item_price_corrected_joined, item_price))
