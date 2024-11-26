@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
-numpy = "^2.1.3"
+numpy = ">=2.0.0,<2.1.0"
 easyocr = "^1.7.2"
 torch = "^2.5.1"
 torchvision = "^0.20.1"
@@ -19,6 +19,7 @@ textblob = "^0.18.0.post0"
 textblob-de = "^0.4.3"
 pandas = "^2.2.3"
 symspellpy = "^6.7.8"
+spacy = "^3.8.2"
 
 
 [build-system]
