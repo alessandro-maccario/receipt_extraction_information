@@ -12,6 +12,11 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from pkgs.text_contour_finding import (
     path_normalizer,
 )
+from pkgs.item_price_csv_dump import item_price_preprocess
+
+
+# Load the Small German dictionary taken from Leipzig Corpora
+nlp_sm = spacy.load("de_core_news_sm")
 
 # path to the folder containing the text extracted from the images
 text_extraction_dir = "sandbox/text_extraction"
@@ -64,85 +69,16 @@ for txt_file in text_extracted:
         # NOTE: then you would need a filter to be applied depending on which receipt you are getting into. For instance, if it it a work related
         # NOTE: one, then you will process that in a different way than an Hofer/Spar/EuroSpar/Lidl one.
 
-        # # convert and save the pd.DataFrame into a csv
-        # df = pd.DataFrame(list(test_item_price), columns=["item", "price"])
+        ##############
+        # NOTE: here add the function to preprocess and correct the list of item, prices before creating the saving the data to csv
+        item_price_list_tuples = item_price_preprocess(
+            nlp=nlp_sm, text_item_price=item_price
+        )
+        ##############
+
+        # convert and save the pd.DataFrame into a csv
+        df = pd.DataFrame(list(item_price_list_tuples), columns=["item", "price"])
         # print(df)
-        # df.to_csv("sandbox/text_extraction/result_original.csv", index=False)
+        df.to_csv("sandbox/text_extraction/result_original.csv", index=False)
 
-print([item[0] for item in item_price])
-
-
-###################################
-# Spacy and Syspell for tokenization and spelling correction
-# download small model
-# !python -m spacy download de_core_news_sm
-
-# Load German dictionary taken from Leipzig Corpora
-nlp_sm = spacy.load("de_core_news_sm")
-
-# instantiate SymSpell obkect
-sym_spell = SymSpell(max_dictionary_edit_distance=2)
-# load SymSpell German dictionary
-sym_spell.load_dictionary(
-    "data/de_polished.txt", term_index=0, count_index=1, encoding="utf-8"
-)
-
-# test if the algorithm works
-text_input = [
-    ("X Glas Masser Ieer", "0.00"),
-    ("Salat groß", "2.40"),
-    (" Metto", "2.10"),
-    ("Sumne", "2.40"),
-]
-print("\n")
-
-# Reference: https://github.com/wolfgarbe/SymSpell
-
-# create a list to store the fixed (item, price) tuple
-fixed_item_price_list = []
-
-for text_item_tup in text_input:
-    # create a list to store the corrected item and price
-    text_input_corrected = []
-    # grab only the text of the tuple
-    clean_text = text_item_tup[0].strip()
-    # grab only the price of the tuple
-    item_price = text_item_tup[1]
-
-    # process the all text of the tuple
-    doc = nlp_sm(clean_text)
-    print("\nToken:", doc)
-
-    # Tokenization
-    # print("Tokens:", [token.text for token in doc])
-
-    for token in doc:
-        # Test word
-        input_word = token.text
-        suggestions = sym_spell.lookup(input_word, Verbosity.TOP, max_edit_distance=2)
-
-        # Print suggestions
-        if suggestions:
-            for suggestion in suggestions:
-                # print("Correct Token:", suggestion.term)
-                # new_token_list.append(suggestion.term)
-
-                # substitute the text with the new correct string
-                text = "".join(suggestion.term)
-                # print("\nCorrected text:", text)
-
-                # append to list and join each string word
-                text_input_corrected.append(text)
-                text_input_corrected_joined = " ".join(text_input_corrected)
-
-                break
-                # print(f"Suggestion: {suggestion.term}, Distance: {suggestion.distance}, Frequency: {suggestion.count}")
-        else:
-            print("No suggestions found.")
-
-    # save the corrected text and the price in a tuple
-    fixed_item_price_list.append((text_input_corrected_joined, item_price))
-
-
-print(text_input_corrected_joined)
-print(fixed_item_price_list)
+# print([item[0] for item in item_price])
