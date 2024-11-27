@@ -1,4 +1,8 @@
-"""Script to cut the image if there is too much border"""
+"""
+Script to cut the image if there is too much border
+
+Currently not used because the pictures are coming from Genius Scan
+"""
 
 import cv2
 import imutils
