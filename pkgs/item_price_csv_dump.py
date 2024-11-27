@@ -6,7 +6,6 @@ Reference
 - https://github.com/wolfgarbe/SymSpell
 """
 
-import spacy
 from symspellpy import SymSpell, Verbosity
 
 ###################################
