@@ -1,3 +1,11 @@
+"""
+This script takes the extracted .txt file and extract only the most relevant information (such as
+item, prices). Errors, mispelling and mistakes from the OCR extraction can still be present.
+
+The script output, for each .txt file, a fixed version of it.
+
+"""
+
 import os
 import sys
 import re
@@ -5,12 +13,11 @@ import glob
 import pandas as pd
 import spacy
 from pathlib import Path
-from symspellpy import SymSpell, Verbosity
 
 
 # Add the root folder to sys.path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from pkgs.text_contour_finding import (
+from pkgs.utils import (
     path_normalizer,
 )
 from pkgs.item_price_csv_dump import item_price_preprocess
@@ -68,11 +75,6 @@ for txt_file in text_extracted:
         print("Test item, price:", item_price)
 
         # TODO: For each item in the tuple, get only the text, split it into token, check and edit the text if the token is found in the dictionry, write back the item to the tuple -> DONE by using the script Spacy/Symspell
-        # NOTE: Here, you would need to implement the script that uses Spacy and Syspell. Need to move that script somewhere else in a class/method/function
-        # NOTE: and call it here to be able to process the text and output the same [(item, price), (item, price), ...] list to then convert
-        # NOTE: it to a DataFrame. In case then you want to apply specific rules (remove the "Netto", "Summe") and so on from the dataframe
-        # NOTE: then you would need a filter to be applied depending on which receipt you are getting into. For instance, if it it a work related
-        # NOTE: one, then you will process that in a different way than an Hofer/Spar/EuroSpar/Lidl one.
 
         ##############
         # NOTE: here add the function to preprocess and correct the list of item, prices before creating the saving the data to csv
@@ -85,5 +87,3 @@ for txt_file in text_extracted:
         df = pd.DataFrame(list(item_price_list_tuples), columns=["item", "price"])
         # print(df)
         df.to_csv(f"sandbox/text_extraction/{txt_filename}_result.csv", index=False)
-
-# print([item[0] for item in item_price])

@@ -6,7 +6,7 @@ import glob
 from pathlib import Path
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from pkgs.text_contour_finding import path_normalizer
+from pkgs.utils import path_normalizer
 
 
 txt_dir = "sandbox/text_extraction"
