@@ -111,7 +111,6 @@ def main():
     # TODO: from the final csv files remove those rows that are empty
 
     # TODO: # 6. feed this final file to Phi3 with the same prompt to rearrange it correctly and save it to a .csv file to be used
-    # TODO: open task
 
 
 if __name__ == "__main__":

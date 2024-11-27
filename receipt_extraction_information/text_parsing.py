@@ -61,21 +61,18 @@ for txt_file in text_extracted:
 
         # date matcher
         date_finder = re.findall(date_matcher, text_substitution)
-        print("Date:", date_finder)
+        # print("Date:", date_finder)
 
         # remove the forward slashes in the text (the date should have already been parsed!)
         text_substitution = text_substitution.replace("/", "")
 
         # based on the following regex, create a list of tuples that contains (item, price)
         item_price = re.findall(regx_pattern_item_price, text_substitution)
-        print("ITEM, PRICE:", item_price)
+        # print("ITEM, PRICE:", item_price)
         # remove the " " element in the list
         item_price = [item_tuple for item_tuple in item_price if item_tuple[0] != " "]
         # remove elements if the price is not #.## but integer or a big number (30177616 for instance)
         item_price = [item_tuple for item_tuple in item_price if "." in item_tuple[1]]
-        # Add the date to each tuple
-        item_price = [(date_finder[0], item, price) for item, price in item_price]
-        print("Test item, price:", item_price)
 
         ##############
         # TODO: For each item in the tuple, get only the text, split it into token, check and edit the text if the token is found in the dictionry, write back the item to the tuple -> DONE by using the script Spacy/Symspell
@@ -84,11 +81,17 @@ for txt_file in text_extracted:
         item_price_list_tuples = item_price_preprocess(
             nlp=nlp_sm, text_item_price=item_price
         )
+        # print("Test tuple -> (item, price):", item_price_list_tuples)
+        # Add the date to each tuple
+        date_item_price_list_tuples = [
+            (date_finder[0], item, price) for item, price in item_price_list_tuples
+        ]
+        print("Test tuple -> (date, item, price):", date_item_price_list_tuples)
         ##############
 
         # convert and save the pd.DataFrame into a csv
         df = pd.DataFrame(
-            list(item_price_list_tuples), columns=["date", "item", "price"]
+            list(date_item_price_list_tuples), columns=["date", "item", "price"]
         )
         # print(df)
         df.to_csv(f"sandbox/text_extraction/{txt_filename}_result.csv", index=False)

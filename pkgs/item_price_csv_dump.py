@@ -84,7 +84,7 @@ def item_price_preprocess(nlp, text_item_price) -> list[tuple]:
         # save the corrected text and the price in a tuple
         fixed_item_price_list.append((text_item_price_corrected_joined, item_price))
 
-    print(text_item_price_corrected_joined)
+    # print(text_item_price_corrected_joined)
     print(fixed_item_price_list)
 
     return fixed_item_price_list
