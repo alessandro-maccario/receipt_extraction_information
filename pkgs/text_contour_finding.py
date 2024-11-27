@@ -1,10 +1,20 @@
+"""
+This module preprocess the image by finding where the text is located and cutting the text
+out of it by saving it into a single image.
+"""
+
 import os
-import re
+import sys
 import cv2
 import imutils
 import numpy as np
-from tqdm import tqdm
 from pathlib import Path
+
+# Add the root folder to sys.path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from pkgs.utils import (
+    folder_if_not_exist,
+)
 
 
 class ContourFinding:
@@ -130,7 +140,7 @@ class ContourFinding:
             # cut and save the bounding box regions with the text, one image for each box
             roi = img[y : y + h, x : x + w]  # roi = region of interest
             # create folder if it does not exists, then save the file in it
-            self.folder_if_not_exist(f"sandbox/receipts/output_roi/{image_name[:-4]}")
+            folder_if_not_exist(f"sandbox/receipts/output_roi/{image_name[:-4]}")
             cv2.imwrite(
                 f"sandbox/receipts/output_roi/{image_name[:-4]}/{image_name[:-4]}_roi_{idx}.jpg",
                 roi,
@@ -139,7 +149,7 @@ class ContourFinding:
             img_final = cv2.rectangle(img2, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
         # create folder if it does not exists, then save the file in it
-        self.folder_if_not_exist(f"sandbox/receipts/output_cut/{image_name[:-4]}")
+        folder_if_not_exist(f"sandbox/receipts/output_cut/{image_name[:-4]}")
         # Path("/my/directory").mkdir(parents=True, exist_ok=True)
         # in the image_name[:-4] slice back until before the filetype
         cv2.imwrite(
@@ -147,31 +157,3 @@ class ContourFinding:
         )
 
         return img_final
-
-
-def folder_if_not_exist(folder_name):
-    """Create folder if not exists"""
-    # Check whether the specified path exists or not
-    isExist = os.path.exists(folder_name)
-    if not isExist:
-        # Create a new directory because it does not exist
-        os.makedirs(folder_name)
-        tqdm.write("\nNew directory created..")
-
-
-def path_normalizer(path):
-    # normalize the path if there are backslash
-    result_path = os.path.normpath(path)
-    result_path = result_path.replace("\\", "/")
-
-    return result_path
-
-
-def regex_substitution(text):
-    """
-    Remove the space between digits in a string and substitute the "," with a "."
-    """
-    remove_spaces_between_numbers = re.compile(r"(\d+)\s*,\s*(\d+)")
-    text_substitution = re.sub(remove_spaces_between_numbers, r" \1.\2 ", text)
-
-    return text_substitution
