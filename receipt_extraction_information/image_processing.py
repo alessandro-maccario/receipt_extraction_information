@@ -108,9 +108,8 @@ def main():
     subprocess.call([sys.executable, "receipt_extraction_information/txt_combiner.py"])
     subprocess.call([sys.executable, "receipt_extraction_information/text_parsing.py"])
 
-    # TODO: from the final csv files remove those rows that are empty
-
-    # TODO: # 6. feed this final file to Phi3 with the same prompt to rearrange it correctly and save it to a .csv file to be used
+    # TODO: # 6. from the final csv files, create a script that, based on the store of the receipt
+    # TODO: # can automatically remove incorrect values (such as "Summe", "Netto") and so on.
 
 
 if __name__ == "__main__":
