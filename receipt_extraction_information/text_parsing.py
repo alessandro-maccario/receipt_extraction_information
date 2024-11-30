@@ -86,7 +86,7 @@ for txt_file in text_extracted:
         date_item_price_list_tuples = [
             (date_finder[0], item, price) for item, price in item_price_list_tuples
         ]
-        print("Test tuple -> (date, item, price):", date_item_price_list_tuples)
+        # print("Test tuple -> (date, item, price):", date_item_price_list_tuples)
         ##############
 
         # convert and save the pd.DataFrame into a csv
