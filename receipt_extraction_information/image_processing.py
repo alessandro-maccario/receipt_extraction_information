@@ -17,16 +17,16 @@ Symspell:
 - Leipzig Corpora: https://corpora.uni-leipzig.de/en?corpusId=deu_news_2023
 """
 
+import easyocr
+import glob
+import logging
 import os
 import re
-import sys
-import glob
-import time
-import easyocr
-import logging
-import subprocess
-from tqdm import tqdm
 from pathlib import Path
+import subprocess
+import sys
+import time
+from tqdm import tqdm
 
 
 # Add the root folder to sys.path
@@ -43,15 +43,12 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(filename="info.log", encoding="utf-8", level=logging.INFO)
 
 # path to the folder containing the original images
-# TODO: # 1. define the folder path
+# 1. define the folder path
 src_dir = "sandbox/receipts/input"
 roi_dir = "sandbox/receipts/output_roi"
 
 
-# TODO: # 2. loop through the images, cut them (using the image_polishing.py file that cut the entire image)
-# TODO: and save them in output_cut folder
-
-
+# 2. loop through the images, cut them (using the image_polishing.py file that cut the entire image) and save them in output_cut folder
 def main():
     for image in os.listdir(src_dir):
         # check if the image ends with png
@@ -59,12 +56,12 @@ def main():
             # create the full path to feed it into the contour_finding
             src_image = f"{src_dir}/{image}"
 
-            # TODO: # 3. To this images, apply the text_contour_finding.py to cut them in small pieces based on text and save the pieces in each individual folder in output_cut/image_cut_1/
+            # 3. To this images, apply the text_contour_finding.py to cut them in small pieces based on text and save the pieces in each individual folder in output_cut/image_cut_1/
             # cut each text contour into small images to be fed into EasyOCR
             contour_finding = ContourFinding(src_image)
             search_contours = contour_finding.cut_bounding_box()
 
-    # TODO: # 4. Loop through the directories of the cut images and apply EasyOCR to save the text extracted
+    # 4. Loop through the directories of the cut images and apply EasyOCR to save the text extracted
     # grab each file in each directory: when recursive is set, ** followed by a path separator matches 0 or more subdirectories.
     roi_images = glob.glob(f"{roi_dir}/**/*.jpg", recursive=True)
     # print(roi_images)
@@ -103,8 +100,8 @@ def main():
         ) as f:
             f.write(result_string)
 
-    # TODO: # 5. Loop through each text file using regex to keep only item/price
-    # NOTE: This would be taken care of by text_combiner.py to combine all the .txt files and then calling the text_parsing.py to tokenization and spell checking.
+    # 5. Loop through each text file using regex to keep only item/price
+    # This would be taken care of by text_combiner.py to combine all the .txt files and then calling the text_parsing.py to tokenization and spell checking.
     subprocess.call([sys.executable, "receipt_extraction_information/txt_combiner.py"])
     subprocess.call([sys.executable, "receipt_extraction_information/text_parsing.py"])
 
