@@ -25,15 +25,6 @@ def item_price_preprocess(nlp, text_item_price) -> list[tuple]:
         "data/de_polished.txt", term_index=0, count_index=1, encoding="utf-8"
     )
 
-    # # test if the algorithm works
-    # text_item_price = [
-    #     ("X Glas Masser Ieer", "0.00"),
-    #     ("Salat groß", "2.40"),
-    #     (" Metto", "2.10"),
-    #     ("Sumne", "2.40"),
-    # ]
-    # print("\n")
-
     # create a list to store the fixed (item, price) tuple
     fixed_item_price_list = []
 
