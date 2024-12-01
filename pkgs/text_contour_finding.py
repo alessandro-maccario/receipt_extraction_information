@@ -63,7 +63,7 @@ class ContourFinding:
         mask = self.fill_white_spots()
 
         # dilation using horizontal kernel
-        kernel_length = 300
+        kernel_length = 500
         horizontal_kernel = cv2.getStructuringElement(
             cv2.MORPH_RECT, (kernel_length, 1)
         )
@@ -136,7 +136,7 @@ class ContourFinding:
         for idx, c in enumerate(contours):
             x, y, w, h = cv2.boundingRect(c)
             # w += 10
-            h += 2
+            h += 10
             # cut and save the bounding box regions with the text, one image for each box
             roi = img[y : y + h, x : x + w]  # roi = region of interest
             # create folder if it does not exists, then save the file in it
