@@ -38,7 +38,7 @@ def item_price_preprocess(nlp, text_item_price) -> list[tuple]:
 
         # process the all text of the tuple
         doc = nlp(clean_text)
-        print("\nToken:", doc)
+        # print("\nToken:", doc)
 
         # Tokenization
         # print("Tokens:", [token.text for token in doc])
