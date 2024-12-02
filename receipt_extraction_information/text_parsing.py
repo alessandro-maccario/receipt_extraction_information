@@ -31,7 +31,7 @@ text_extraction_dir = "sandbox/text_extraction"
 
 # regex patterns
 remove_spaces_between_numbers = re.compile(r"(\d+)\s*,\s*(\d+)")
-date_matcher = r"(\d{2}[./]\d{2}[./]\d{4})"
+date_matcher = r"(\d{2}\s*[./]\s*\d{2}\s*[./]\s*\d{4})"
 # (?:...) is a non-capturing group, meaning it groups things together without extracting them as separate matches.
 # The ? at the end makes the entire group optional. This means that a number like 2 (no decimal part) will still match, but if there is a decimal, it must follow the [0-9]+ rules.
 regx_pattern_item_price = r"([a-zA-ZäöüßÄÖÜéÉ ]+),\s*([0-9]+(?:[.,][0-9]+)?)"
