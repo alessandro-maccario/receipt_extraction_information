@@ -33,3 +33,42 @@ def regex_substitution(text):
     text_substitution = re.sub(remove_spaces_between_numbers, r" \1.\2 ", text)
 
     return text_substitution
+
+
+def merge_bounding_boxes(bounding_boxes, threshold=10):
+    """
+    Merge overlapping or close enough bounding boxes based on the threshold parameter.
+
+    Args:
+        bounding_boxes: List of bounding boxes (x, y, w, h).
+        threshold: Maximum distance between boxes to consider merging.
+
+    Returns:
+        List of merged bounding boxes.
+    """
+    merged_boxes = []
+
+    for box in bounding_boxes:
+        x, y, w, h = box
+        merged = False
+        for mbox in merged_boxes:
+            mx, my, mw, mh = mbox
+            # Check if the boxes are close enough to merge
+            if (
+                x < mx + mw + threshold
+                and mx < x + w + threshold
+                and y < my + mh + threshold
+                and my < y + h + threshold
+            ):
+                # Merge the boxes by extending boundaries
+                mbox[0] = min(mx, x)
+                mbox[1] = min(my, y)
+                mbox[2] = max(mx + mw, x + w) - mbox[0]
+                mbox[3] = max(my + mh, y + h) - mbox[1]
+                merged = True
+                break
+
+        if not merged:
+            merged_boxes.append([x, y, w, h])
+
+    return merged_boxes
