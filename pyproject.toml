@@ -20,6 +20,7 @@ textblob-de = "^0.4.3"
 pandas = "^2.2.3"
 symspellpy = "^6.7.8"
 spacy = "^3.8.2"
+gpt4all = "^2.8.2"
 
 
 [build-system]
