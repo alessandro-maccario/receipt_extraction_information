@@ -8,7 +8,6 @@ from pathlib import Path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from pkgs.utils import path_normalizer
 
-
 txt_dir = "sandbox/text_extraction"
 # grab each file in each directory: when recursive is set, ** followed by a path separator matches 0 or more subdirectories.
 txt_folder = glob.glob(f"{txt_dir}/*", recursive=False)
