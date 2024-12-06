@@ -2,6 +2,7 @@
 Utility module to store those functions that do not belong to a specific class
 """
 
+import csv
 import os
 import re
 from tqdm import tqdm
@@ -101,20 +102,20 @@ def clean_receipt_text(receipt_text):
     )  # Remove non-essential lines
     cleaned_date_text = re.sub(
         r"\s*(\d{2})\s*[./]\s*(\d{2})\s*[./]\s*(\d{4})", r" \1.\2.\3", cleaned_text
-    )
-    cleaned_date_text = re.sub(
-        r"\s*(\d{2})\s*[./]\s*(\d{2})\s*[./]\s*(\d{4})", r" \1.\2.\3", cleaned_text
     ).strip()
+    # cleaned_date_text = re.sub(
+    #     r"\s*(\d{2})\s*[./]\s*(\d{2})\s*[./]\s*(\d{4})", r" \1.\2.\3", cleaned_text
+    # ).strip()
 
     # Step 2: Extract date
-    date_match = re.search(r"\b\d{2}\.\d{2}\.\d{4}\b", cleaned_date_text)
+    date_match = re.search(r"\b\d{2}[./]\d{2}[./]\d{4}\b", cleaned_date_text)
     date = date_match.group() if date_match else None
 
     # Step 3: Extract items and prices
     # Find all items and prices by splitting and matching patterns
     items_and_prices = []
     for match in re.finditer(
-        r"([a-zA-Z\s\-]+)(?:\s+\d+%?)?,(-?\s*\d+\.\d{2})", cleaned_date_text
+        r"([a-zA-ZäöüÄÖÜß\s\-/]+)(?:\s+\d+%?)?,(-?\s*\d+\.\d{2})", cleaned_date_text
     ):
         item = match.group(1).strip()
         price = match.group(2).strip() if match.group(2) else None
@@ -129,6 +130,36 @@ def clean_receipt_text(receipt_text):
     df = pd.read_csv(StringIO(csv_output), sep=",")
 
     # Step 6: replace any spaces present in the price column, if any
-    df["price"] = df["price"].apply(lambda x: x.replace(" ", ""))
+    df["price"] = df["price"].apply(lambda x: str(x).replace(" ", ""))
 
     return df
+
+
+def md2csv(markdown_table):
+    """Convert a markdown table to a pandas dataframe
+
+    Parameters
+    ----------
+    markdown_table : str
+        Markdown table containing the receipt data
+
+    Returns
+    -------
+    pd.DataFrame
+        Pandas dataframe with the data from the md string
+    """
+    lines = markdown_table.split("\n")
+
+    # Use StringIO to create a file-like object from the string
+    # markdown_table_io = io.StringIO(markdown_table)
+
+    dict_reader = csv.DictReader(lines, delimiter="|")
+
+    data = []
+    # skip first row, i.e. the row between the header and data with only "---------------"
+    for row in list(dict_reader)[1:]:
+        # strip spaces and ignore first empty column
+        r = {k.strip(): v.strip() for k, v in row.items() if k != ""}
+        data.append(r)
+
+    return pd.DataFrame(data)
