@@ -104,9 +104,11 @@ def main():
     # This would be taken care of by text_combiner.py to combine all the .txt files and then calling the text_parsing.py to tokenization and spell checking.
     subprocess.call([sys.executable, "receipt_extraction_information/txt_combiner.py"])
     subprocess.call([sys.executable, "receipt_extraction_information/text_parsing.py"])
-
     # TODO: # 6. from the final csv files, create a script that, based on the store of the receipt
     # TODO: # can automatically remove incorrect values (such as "Summe", "Netto") and so on.
+    subprocess.call(
+        [sys.executable, "receipt_extraction_information/gpt4all_text_enhancement.py"]
+    )
 
 
 if __name__ == "__main__":
