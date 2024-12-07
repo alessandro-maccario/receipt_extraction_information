@@ -51,7 +51,7 @@ for csv_file in tqdm(text_extracted):
     csv_filename = csv_file_path_to_name.name[:-4]
 
     csv_file = path_normalizer(csv_file)
-    print("\nCSV FILE:", csv_file, "\n")
+    # print("\nCSV FILE:", csv_file, "\n")
 
     # TODO: TEST WITH ONE CSV: READ THE CSV CREATED BY THE text_parsing.py SCRIPT AND CONVERT IT TO MD BEFORE FEEDING IT INTO GPT4ALL
     # Load the data

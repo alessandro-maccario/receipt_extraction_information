@@ -1,5 +1,8 @@
 """The txt_combiner reads in all the .txt files and combine them in one single file."""
 
+#######################
+### IMPORT PACKAGES ###
+#######################
 import os
 import sys
 import glob
@@ -7,6 +10,10 @@ from pathlib import Path
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from pkgs.utils import path_normalizer
+
+#######################
+######## MAIN #########
+#######################
 
 txt_dir = "sandbox/text_extraction"
 # grab each file in each directory: when recursive is set, ** followed by a path separator matches 0 or more subdirectories.

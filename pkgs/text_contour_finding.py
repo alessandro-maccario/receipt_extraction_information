@@ -3,6 +3,10 @@ This module preprocess the image by finding where the text is located and cuttin
 out of it by saving it into a single image.
 """
 
+#######################
+### IMPORT PACKAGES ###
+#######################
+
 import os
 import sys
 import cv2
@@ -13,6 +17,11 @@ from pathlib import Path
 # Add the root folder to sys.path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from pkgs.utils import folder_if_not_exist, merge_bounding_boxes
+
+
+#######################
+######## MAIN #########
+#######################
 
 
 class ContourFinding:
@@ -138,14 +147,7 @@ class ContourFinding:
 
         for idx, (x, y, w, h) in enumerate(merged_boxes):
             # Cut and save the bounding box regions with the text, one image for each box
-            # roi = img[y : y + h, x : x + w]  # ROI = region of interest
-
-            # for idx, c in enumerate(contours):
-            #     x, y, w, h = cv2.boundingRect(c)
-            #     print("X:", x, "Y:", y, "W:", w, "H:", h)
-            #     # w += 10
-            #     h += 2
-            # cut and save the bounding box regions with the text, one image for each box
+            # increment the height to include a bit more text in the bounded box
             h += 2
             roi = img[y : y + h, x : x + w]  # roi = region of interest
             # create folder if it does not exists, then save the file in it

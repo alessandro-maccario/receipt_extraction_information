@@ -17,6 +17,10 @@ Symspell:
 - Leipzig Corpora: https://corpora.uni-leipzig.de/en?corpusId=deu_news_2023
 """
 
+#######################
+### IMPORT PACKAGES ###
+#######################
+
 import easyocr
 import glob
 import logging
@@ -37,6 +41,10 @@ from pkgs.utils import (
     path_normalizer,
     regex_substitution,
 )
+
+#######################
+######## MAIN #########
+#######################
 
 # instantiate the logger to be able to save logs information, INFO level
 logger = logging.getLogger(__name__)
@@ -104,11 +112,13 @@ def main():
     # This would be taken care of by text_combiner.py to combine all the .txt files and then calling the text_parsing.py to tokenization and spell checking.
     subprocess.call([sys.executable, "receipt_extraction_information/txt_combiner.py"])
     subprocess.call([sys.executable, "receipt_extraction_information/text_parsing.py"])
-    # TODO: # 6. from the final csv files, create a script that, based on the store of the receipt
-    # TODO: # can automatically remove incorrect values (such as "Summe", "Netto") and so on.
+    # 6. from the final csv files, create a script that, based on the store of the receipt
+    # can automatically remove incorrect values (such as "Summe", "Netto") and so on.
     subprocess.call(
         [sys.executable, "receipt_extraction_information/gpt4all_text_enhancement.py"]
     )
+
+    # TODO: 7. Merge all the csv into one and add category by using gpt4all to each item
 
 
 if __name__ == "__main__":
