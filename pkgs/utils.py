@@ -4,6 +4,7 @@ Utility module to store those functions that do not belong to a specific class
 
 import csv
 from datetime import datetime
+import glob
 import os
 import re
 from tqdm import tqdm
@@ -12,6 +13,9 @@ import sys
 # This imports a helper tool, StringIO, that lets you treat a string as if it were a file.
 from io import StringIO
 import pandas as pd
+
+# Add the root folder to sys.path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 def folder_if_not_exist(folder_name):
@@ -160,7 +164,41 @@ def md2csv(markdown_table):
     # skip first row, i.e. the row between the header and data with only "---------------"
     for row in list(dict_reader)[1:]:
         # strip spaces and ignore first empty column
-        r = {k.strip(): v.strip() for k, v in row.items() if k != ("", None)}
-        data.append(r)
+        try:
+            r = {k.strip(): v.strip() for k, v in row.items() if k != ""}
+            data.append(r)
+        except AttributeError:
+            r = ""
+            data.append(r)
 
     return pd.DataFrame(data)
+
+
+def date_convert(date_to_convert):
+    return datetime.strptime(date_to_convert, "%d.%m.%Y").strftime("%Y.%m.%d")
+
+
+def combine_csv(dir_path: str) -> None:
+    """Concatenate and then convert to a final csv all the csvs containing data for date, item, price
+
+    Parameters
+    ----------
+    dir_path : str
+        The path where to find the csv data
+    """
+    # grab each file in each directory: when recursive is set, ** followed by a path separator matches 0 or more subdirectories.
+    all_files = glob.glob(f"{dir_path}/*_cleaned.csv", recursive=False)
+
+    csv_list = []
+
+    for filename in all_files:
+        df = pd.read_csv(filename, index_col=None, header=0)
+        csv_list.append(df)
+
+    # concatenate all the csvs
+    frame = pd.concat(csv_list, axis=0, ignore_index=True)
+    # convert the date to Y.m.d format
+    frame["date"] = frame["date"].apply(date_convert)
+
+    # save the final pandas dataframe into a csv file
+    frame.to_csv(f"{dir_path}/item_price_cleaned.csv", index=False)
