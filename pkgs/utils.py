@@ -3,6 +3,7 @@ Utility module to store those functions that do not belong to a specific class
 """
 
 import csv
+from datetime import datetime
 import os
 import re
 from tqdm import tqdm
@@ -103,13 +104,13 @@ def clean_receipt_text(receipt_text):
     cleaned_date_text = re.sub(
         r"\s*(\d{2})\s*[./]\s*(\d{2})\s*[./]\s*(\d{4})", r" \1.\2.\3", cleaned_text
     ).strip()
-    # cleaned_date_text = re.sub(
-    #     r"\s*(\d{2})\s*[./]\s*(\d{2})\s*[./]\s*(\d{4})", r" \1.\2.\3", cleaned_text
-    # ).strip()
 
     # Step 2: Extract date
     date_match = re.search(r"\b\d{2}[./]\d{2}[./]\d{4}\b", cleaned_date_text)
-    date = date_match.group() if date_match else None
+    # if date_match is not None (meaning a match was found), date will be set to the matched date string (e.g., "23.05.2021").
+    date_group = date_match.group() if date_match else None
+    # convert the date in the correct format
+    date = datetime.strptime(date_group, "%d.%m.%Y").strftime("%Y.%m.%d")
 
     # Step 3: Extract items and prices
     # Find all items and prices by splitting and matching patterns
@@ -159,7 +160,7 @@ def md2csv(markdown_table):
     # skip first row, i.e. the row between the header and data with only "---------------"
     for row in list(dict_reader)[1:]:
         # strip spaces and ignore first empty column
-        r = {k.strip(): v.strip() for k, v in row.items() if k != ""}
+        r = {k.strip(): v.strip() for k, v in row.items() if k != ("", None)}
         data.append(r)
 
     return pd.DataFrame(data)
