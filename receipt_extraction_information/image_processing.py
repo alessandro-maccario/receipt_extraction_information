@@ -40,6 +40,7 @@ from pkgs.utils import (
     folder_if_not_exist,
     path_normalizer,
     regex_substitution,
+    combine_csv,
 )
 
 #######################
@@ -118,7 +119,10 @@ def main():
         [sys.executable, "receipt_extraction_information/gpt4all_text_enhancement.py"]
     )
 
-    # TODO: 7. Merge all the csv into one and add category by using gpt4all to each item
+    # 7. Merge all the csv into one
+    # define the path where to find the csvs
+    csv_dir = "sandbox/text_extraction"
+    combine_csv(csv_dir)
 
 
 if __name__ == "__main__":
