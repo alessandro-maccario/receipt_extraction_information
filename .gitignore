@@ -6,3 +6,4 @@
 *.gguf
 *.json
 *.xlsx
+constants.py
