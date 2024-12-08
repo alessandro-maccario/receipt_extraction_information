@@ -52,15 +52,13 @@ for csv_file in tqdm(text_extracted):
                         {df_md_conversion}
                         
                         It contains items and their prices. 
-                        Correct any grammar/mispelling mistakes either from the German or the English language. 
-                        Only accepted answer: the markdown table.
+                        Correct any grammar/mispelling mistakes either from the German or the English language.
+                        If no corrections are needed, leave the markdown untouched. 
+                        ONLY accepted answer: the markdown table.
                         Do not infer any extra information from the text provided.
                         Translate the items to English, if they are not yet translated.
-                        If you do not understand a specific word, do not insert it into the results.
-                        Do not invent prices. If the price are not understandable, use 0.00.
                         Stick only to the information provided. 
                         Column headers must be in small letters. 
-                        If no corrections are needed, leave the markdown untouched. 
                         Do not add any other comment to the answer, just the markdown.
                         Do not add any other text such as "Here is the corrected CSV:".
                         Remove any rows that is not related to an shopping item.
@@ -80,8 +78,6 @@ for csv_file in tqdm(text_extracted):
         if json_dict["role"] == "assistant":
             md_item_price_table = "".join(json_dict["content"])
             # print(json_dict["content"])
-
-    # TODO: need to convert this markdown file to a JSON and then to a csv format like
 
     # convert the markdown output into a csv table
     markdown_to_csv_conversion = md2csv(md_item_price_table)
