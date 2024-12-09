@@ -3,3 +3,7 @@
 *.log
 *.txt
 *.csv
+*.gguf
+*.json
+*.xlsx
+constants.py

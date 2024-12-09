@@ -3,6 +3,10 @@ This module preprocess the image by finding where the text is located and cuttin
 out of it by saving it into a single image.
 """
 
+#######################
+### IMPORT PACKAGES ###
+#######################
+
 import os
 import sys
 import cv2
@@ -12,9 +16,12 @@ from pathlib import Path
 
 # Add the root folder to sys.path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from pkgs.utils import (
-    folder_if_not_exist,
-)
+from pkgs.utils import folder_if_not_exist, merge_bounding_boxes
+
+
+#######################
+######## MAIN #########
+#######################
 
 
 class ContourFinding:
@@ -133,11 +140,15 @@ class ContourFinding:
         img = self.rotateImage(original=img, angle=angle)
         ############################
 
-        for idx, c in enumerate(contours):
-            x, y, w, h = cv2.boundingRect(c)
-            # w += 10
-            h += 10
-            # cut and save the bounding box regions with the text, one image for each box
+        # Get bounding boxes from contours
+        bounding_boxes = [cv2.boundingRect(c) for c in contours]
+        # Merge overlapping or nearby bounding boxes
+        merged_boxes = merge_bounding_boxes(bounding_boxes)
+
+        for idx, (x, y, w, h) in enumerate(merged_boxes):
+            # Cut and save the bounding box regions with the text, one image for each box
+            # increment the height to include a bit more text in the bounded box
+            h += 2
             roi = img[y : y + h, x : x + w]  # roi = region of interest
             # create folder if it does not exists, then save the file in it
             folder_if_not_exist(f"sandbox/receipts/output_roi/{image_name[:-4]}")
@@ -150,8 +161,9 @@ class ContourFinding:
 
         # create folder if it does not exists, then save the file in it
         folder_if_not_exist(f"sandbox/receipts/output_cut/{image_name[:-4]}")
-        # Path("/my/directory").mkdir(parents=True, exist_ok=True)
         # in the image_name[:-4] slice back until before the filetype
+
+        # save the entire image with the bounding boxes around the text
         cv2.imwrite(
             f"sandbox/receipts/output_cut/{image_name[:-4]}/{image_name}", img_final
         )

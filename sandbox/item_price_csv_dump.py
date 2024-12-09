@@ -38,12 +38,17 @@ def item_price_preprocess(nlp, text_item_price) -> list[tuple]:
 
         # process the all text of the tuple
         doc = nlp(clean_text)
-        print("\nToken:", doc)
+        # print("\nToken:", doc)
 
         # Tokenization
         # print("Tokens:", [token.text for token in doc])
 
         for token in doc:
+            print(token.text)
+            if "Joker" in token.text:
+                # keep in the token in case it is a Joker (Eurospar receipt discount)
+                text_item_price_corrected_joined = token.text
+                break
             # Test word
             input_word = token.text
             suggestions = sym_spell.lookup(
@@ -76,6 +81,6 @@ def item_price_preprocess(nlp, text_item_price) -> list[tuple]:
         fixed_item_price_list.append((text_item_price_corrected_joined, item_price))
 
     # print(text_item_price_corrected_joined)
-    print(fixed_item_price_list)
+    # print(fixed_item_price_list)
 
     return fixed_item_price_list
