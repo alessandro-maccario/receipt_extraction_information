@@ -36,15 +36,16 @@ for filename in os.listdir(image_folder_path):
 
     # save the corresponding file with filename the name of the image
     with open(
-        f"data/output/{filename.rsplit('.', 1)[0]}.json", "w"
+        f"../data/output/{filename.rsplit('.', 1)[0]}.json", "w"
     ) as json_content_receipt:
         json.dump(response["message"]["content"], json_content_receipt)
 
+print("-" * 30)
 print("Read all the images and saved the content to JSON! ✅")
-print("--- %s seconds ---" % (time.time() - start_time))
+print("-" * 30)
 
 # 2nd Phase: save all the json receipts into an .odf file
-json_directory = "/home/m/Documents/expenses_data/json_receipts/"
+json_directory = "../data/output"
 all_data = []
 
 for filename in os.listdir(json_directory):
@@ -62,10 +63,12 @@ df = pd.DataFrame(all_data)
 
 # Save data to odf
 df.to_excel(
-    "/home/m/solutions/learning_python/receipt_extraction_information/output/output.ods",
+    "../data/output/output.ods",
     sheet_name="Data",
     index=False,
     engine="odf",
 )
-
-print("ODS file created successfully!")
+print("-" * 30)
+print("ODS file created successfully! ✅")
+print("-" * 30)
+print("--- %s seconds ---" % (time.time() - start_time))
