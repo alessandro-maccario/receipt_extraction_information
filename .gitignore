@@ -6,4 +6,5 @@
 *.gguf
 *.json
 *.xlsx
+*.ods
 constants.py
