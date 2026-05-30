@@ -7,4 +7,5 @@
 *.json
 *.xlsx
 *.ods
+*.jpg
 constants.py
